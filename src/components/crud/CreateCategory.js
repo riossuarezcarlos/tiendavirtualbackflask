@@ -16,6 +16,7 @@ export default function CreateCategory(props){
     const getCategory = async () => {
         if(id !== undefined){
             let data = await getCategoriesbyId(id);
+            console.log(data[0].descripcion);
             setValue("categoryDesc",data.descripcion);
         }
     }
