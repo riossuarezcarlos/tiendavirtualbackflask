@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import CLabel from './CLabel';
  
-import { getLabels } from '../services/label';
+import { getLabels } from '../services/labelfirebase';
  
 
 export default function CCategory() {

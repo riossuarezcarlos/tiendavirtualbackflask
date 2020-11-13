@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react'
 import ListProduct from '../components/crud/ListProduct';
 import CLoading from "../components/CLoading";
-import { getProducts, deleteProductById } from '../services/product';
+import { getProducts, deleteProductById } from '../services/productfirebase';
 import {Link} from "react-router-dom";
 import Swal from "sweetalert2";
 

@@ -3,7 +3,7 @@ import Accordion from '@material-ui/core/Accordion';
 import AccordionSummary from '@material-ui/core/AccordionSummary';
 import Typography from '@material-ui/core/Typography';
 import CNavSubCategory from './CNavSubCategory';
-import { getCategories } from '../services/category'; 
+import { getCategories } from '../services/categoryfirebase'; 
 
 import './css/CNavSide.css'; 
   

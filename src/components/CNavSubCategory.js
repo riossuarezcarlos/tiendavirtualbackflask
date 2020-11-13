@@ -5,7 +5,7 @@ import AccordionDetails from '@material-ui/core/AccordionDetails';
 import {Link} from "react-router-dom"; 
 
 import {NavSideContext} from '../context/navSideContext';
-import { getSubCategoriesByCategory } from '../services/subcategory';
+import { getSubCategoriesByCategory } from '../services/subcategoryfirebase';
 
 import ListGroup from 'react-bootstrap/ListGroup'
 

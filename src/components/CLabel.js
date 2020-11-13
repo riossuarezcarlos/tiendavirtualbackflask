@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import CProduct from './CProduct';
-import { getProductsByLabel } from '../services/product';
+import { getProductsByLabel } from '../services/productfirebase';
 
 export default function CCLabel({label}) {
  

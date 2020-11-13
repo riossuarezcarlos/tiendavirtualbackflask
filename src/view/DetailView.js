@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react' 
-import { getProductbyId } from '../services/product' 
+import { getProductbyId } from '../services/productfirebase' 
 import { CarritoContext } from '../context/carritoContext'
 import CLoading from '../components/CLoading'
 import Count from '../components/CCount'

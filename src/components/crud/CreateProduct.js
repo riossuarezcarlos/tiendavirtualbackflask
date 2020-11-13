@@ -5,7 +5,7 @@ import { getCategories } from '../../services/category';
 import { getSubCategoriesByCategory } from '../../services/subcategory';
 import { getProductTypesBySubCategory } from '../../services/producttype';
 import { getLabels } from '../../services/label';
-import { createProduct, subirImagen } from '../../services/product';
+import { createProduct, subirImagen } from '../../services/productfirebase';
 import Swal from 'sweetalert2';
 import { useHistory } from  'react-router-dom';
 

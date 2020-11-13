@@ -9,7 +9,7 @@ import FormGroup from '@material-ui/core/FormGroup';
 import CProduct from '../components/CProduct';
 import CSearchSubCategory from '../components/CSearchSubCategory';
 import { getProductTypesBySubCategory } from '../services/producttype';
-import { searchProducts } from '../services/product';
+import { searchProducts } from '../services/productfirebase';
 
 import {CarritoContext} from '../context/carritoContext';
 
