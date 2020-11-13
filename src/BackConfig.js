@@ -1,4 +1,4 @@
-export const URL_BACK = 'https://backflaskgrupo4.herokuapp.com/';
+export const URL_BACK = 'https://backflaskgrupo4.herokuapp.com/git ';
 
 export const FetchGet = async (endpoint) => {
     const response = await fetch(URL_BACK + endpoint);
