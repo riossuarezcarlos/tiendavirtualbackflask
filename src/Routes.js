@@ -28,7 +28,7 @@ import CreateLabel from './components/crud/CreateLabel';
 export default function Routes() {  
     return (
         <Fragment>
-            {/* <Redirect from='/' to='/home' />  */}
+            <Redirect from='/' to='/home' /> 
             <Route exac path="/home" component={HomeView} />
 
             <Route exact path="/login" component={LoginView} />
