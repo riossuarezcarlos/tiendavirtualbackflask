@@ -1,62 +1,90 @@
 import React, { useState, useEffect } from 'react'
 
-import Jumbotron from 'react-bootstrap/Jumbotron'; 
-import { getCategories } from '../../services/category';
-import { getSubCategoriesByCategory } from '../../services/subcategory';
-import { getProductTypesBySubCategory } from '../../services/producttype';
+import { getCategories, getCategoriesbyId } from '../../services/category';
+import { getSubCategoriesbyId } from '../../services/subcategory';
+import { getProductTypesbyId, getProductTypesBySubCategory } from '../../services/producttype';
 import { getLabels } from '../../services/label';
-import { createProduct, subirImagen } from '../../services/productfirebase';
+import { getMarks } from '../../services/mark';
+import { createProduct, updateProduct, getProductbyId, subirImagen } from '../../services/product';
 import Swal from 'sweetalert2';
 import { useHistory } from  'react-router-dom';
 
 import {storage} from '../../FirestoreConfig';
-import { Controller, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 
 import { v4 as uuidv4 } from 'uuid';
 
 let imagenProducto;
 
-export default function CreateProduct(){
+export default function CreateProduct(props){
 
-  
+    const {id} = props.match.params;
 
     const history = useHistory();
-    let { control, register, handleSubmit, errors} = useForm();
+    let { register, handleSubmit, setValue, errors} = useForm();
 
     const [labels, setLabels] = useState([]);
+    const [marks, setMarks] = useState([]);
     const [categories, setCategories] = useState([]);
     const [subCategories, setSubCategories] = useState([]);
     const [productTypes, setProductTypes] = useState([]);
+ 
+    const getProduct = async () => {
+        if(id !== undefined){
+            let data = await getProductbyId(id);
+            console.log("object", data)
+ 
+            setValue("productDesc",data.descripcion);
+            setValue("productName",data.nombre);
+            setValue("productPrice",data.precio);
+            setValue("productStock",data.stock);
+      
+            await getSubCategory(data.categoria);
+            await getProductType(data.subcategoria);
+            
+            setValue("producttypeId",data.tipoproducto);
+            setValue("markId",data.marca);
+            setValue("labelId",data.etiqueta);        
+            setValue("categoryId",data.categoria);      
+            setValue("subcategoryId",data.subcategoria);
+        }
+    }
   
     const manejarImagen = (e) => {
         e.preventDefault();
-        let  miImagen = e.target.files[0];
-        console.log(miImagen)
+        let  miImagen = e.target.files[0]; 
         imagenProducto = miImagen;
     }
 
     const manejarSubmit  = async (data) => {    
-
-        let product = {...data, productPrice: parseFloat(data.productPrice), productStock: parseFloat(data.productStock)}
+ 
         let uuid =  uuidv4();
-       const refStorage = storage.ref(`productos/${uuid}`);
+        const refStorage = storage.ref(`img/${uuid}`);
+
+        let product = {...data, productPrice: parseFloat(data.productPrice)}
+ 
+        // Registrar la imagen solo si se ha seleccionado una
 
         subirImagen(imagenProducto, refStorage)
         .then(async (urlImagen) => {
             //Crear el producto
-            console.log("urlImagen", urlImagen);
-            await createProduct({...product, productImg: urlImagen}); 
+            console.log(urlImagen)
+            if(id === undefined){ 
+                await createProduct({...product, productImg: urlImagen}); 
 
+            } else {
+                await updateProduct({...product, productImg: urlImagen}, id); 
+            }
             Swal.fire({
                 icon: "success",
                 title: "Producto creado exitosamente",
                 showConfirmButton: false,
                 timer: 1000
-            })
-
-            return history.push('/product');
-        })     
+            });
+            return history.push('/product'); 
+        })  
         
+
     }
   
     const getCategory = async () => {
@@ -65,13 +93,15 @@ export default function CreateProduct(){
     } 
 
     const getSubCategory = async (categoryId) => { 
-        let data = await getSubCategoriesByCategory(categoryId); 
-        setSubCategories(data);
+        let data = await getCategoriesbyId(categoryId); 
+        data && setSubCategories(data.subcategorias);
     } 
 
     const getProductType = async (subCategoryId) => { 
-        let data = await getProductTypesBySubCategory(subCategoryId); 
-        setProductTypes(data);
+        
+        let data = await getSubCategoriesbyId(subCategoryId); 
+        console.log("object", data)
+        data && setProductTypes(data.tipos);
     } 
 
     const getLabel = async () => {
@@ -79,14 +109,10 @@ export default function CreateProduct(){
         setLabels(data);
     }  
 
-    const asignarCategoria = (categoria) =>{
-        getSubCategory(categoria);
-    }
-
-    const asignarSubCategoria = (subcategoria) =>{
-        getProductType(subcategoria);
-    }
-
+    const getMark = async () => {
+        let data = await getMarks(); 
+        setMarks(data);
+    }  
 
     //* Validar Select **/
     
@@ -99,10 +125,17 @@ export default function CreateProduct(){
         }
     }
 
-  
+    const showSelect = async () => {
+        await getMark();
+        await getCategory();
+        await getLabel();
+    }
+    
+
     useEffect(() => {
-        getCategory();
-        getLabel();
+        showSelect();
+
+        getProduct();
     },[])
 
     return (
@@ -116,24 +149,28 @@ export default function CreateProduct(){
                         <div className="card mt-3">
                             <div className="card-body" style={{paddingTop:'10px', paddingBottom: '0px'}}>
 
-                                <h1 className="align-self-center">Agregar un nuevo producto</h1>  
+                                <h1 className="align-self-center">
+                                    {
+                                        id ? "Actualizar producto" : "Agregar nuevo producto"
+                                    }
+                                </h1> 
             
 
                                 <div className="form-group">
                                     <label>Categoria de Producto</label>
-                                    <select name="productcategoryId" className="form-control" 
-                                        onChange={(ev) => {asignarCategoria(ev.target.value)}}
+                                    <select name="categoryId" className="form-control" 
+                                        onChange={(ev) => {getSubCategory(ev.target.value)}}
                                         ref={register({validate:validateSelect})
                                     }>
                                         <option value="0">Seleccionar Categoria</option> 
                                         {
                                             categories.map((elm,i) => (
-                                                <option key={i} value={elm.id}>{elm.categoryName}</option>
+                                                <option key={i} value={elm.id}>{elm.descripcion}</option>
                                             ))
                                         }
                                     </select>
                                     {
-                                        errors.productcategoryId && errors.productcategoryId.type ==="validate" && (
+                                        errors.categoryId && errors.categoryId.type ==="validate" && (
                                             <small className="text-danger font-weight-bold">Debe seleccionar una categoria de producto</small>
                                         )
                                     }
@@ -141,19 +178,19 @@ export default function CreateProduct(){
 
                                 <div className="form-group">
                                     <label>Subcategoria de Producto</label>
-                                    <select name="productsubcategoryId" className="form-control" 
-                                        onChange={(ev) => {asignarSubCategoria(ev.target.value)}}
+                                    <select name="subcategoryId" className="form-control" 
+                                        onChange={(ev) => {getProductType(ev.target.value)}}
                                         ref={register({validate:validateSelect})
                                     }>
                                         <option value="0">Seleccionar Subcategoria</option> 
                                         {
                                             subCategories.map((elm,i) => (
-                                                <option key={i} value={elm.id}>{elm.subcategoryName}</option>
+                                                <option key={i} value={elm.id}>{elm.descripcion}</option>
                                             ))
                                         }
                                     </select>
                                     {
-                                        errors.productsubcategoryId && errors.productsubcategoryId.type ==="validate" && (
+                                        errors.subcategoryId && errors.subcategoryId.type ==="validate" && (
                                             <small className="text-danger font-weight-bold">Debe seleccionar una subcategoria de producto</small>
                                         )
                                     }
@@ -167,7 +204,7 @@ export default function CreateProduct(){
                                         <option value="0">Seleccionar Tipo</option> 
                                         {
                                             productTypes.map((elm,i) => (
-                                                <option key={i} value={elm.id}>{elm.producttypeName}</option>
+                                                <option key={i} value={elm.id}>{elm.descripcion}</option>
                                             ))
                                         }
                                     </select>
@@ -186,7 +223,7 @@ export default function CreateProduct(){
                                         <option value="0">Seleccionar Etiqueta</option> 
                                         {
                                             labels.map((elm,i) => (
-                                                <option key={i} value={elm.id}>{elm.labelName}</option>
+                                                <option key={i} value={elm.id}>{elm.descripcion}</option>
                                             ))
                                         }
                                     </select>
@@ -196,6 +233,25 @@ export default function CreateProduct(){
                                         )
                                     }
                                 </div>
+
+                                <div className="form-group">
+                                    <label>Marca de Producto</label>
+                                    <select name="markId" className="form-control" 
+                                        ref={register({validate:validateSelect})
+                                    }>
+                                        <option value="0">Seleccionar Marca</option> 
+                                        {
+                                            marks.map((elm,i) => (
+                                                <option key={i} value={elm.id}>{elm.descripcion}</option>
+                                            ))
+                                        }
+                                    </select>
+                                    {
+                                        errors.markId && errors.markId.type ==="validate" && (
+                                            <small className="text-danger font-weight-bold">Debe seleccionar una etiqueta de producto</small>
+                                        )
+                                    }
+                                </div> 
                                 
                                 <div className="form-group">
                                     <label htmlFor="productName">Nombre Producto:</label>
@@ -222,52 +278,28 @@ export default function CreateProduct(){
                                 </div>
 
                                 <div className="form-group">
-                                    <label htmlFor="productDescription">Descripción Producto:</label>
+                                    <label htmlFor="productDesc">Descripción Producto:</label>
                                     <textarea
                                     className="form-control"
-                                    id="productDescription"
-                                    name="productDescription"
+                                    id="productDesc"
+                                    name="productDesc"
                                     ref={register({required:true, minLength:20, maxLength:250})}
                                     />
-                                    {errors.productDescription && errors.productDescription.type === 'required' && (
+                                    {errors.productDesc && errors.productDesc.type === 'required' && (
                                     <small className="text-danger font-weight-bold">Debe ingresar la descripción del producto</small>
                                     )}
                                     {
-                                        errors.productDescription && errors.productDescription.type === "minLength" && (
+                                        errors.productDesc && errors.productDesc.type === "minLength" && (
                                             <small className="text-danger font-weight-bold">La descripción no puede ser menor a 20 digitos</small>
                                         )
                                     }
                                     {
-                                        errors.productDescription && errors.productDescription.type === "maxLength" && (
+                                        errors.productDesc && errors.productDesc.type === "maxLength" && (
                                             <small className="text-danger font-weight-bold">La descripción no puede ser mayor a 250 digitos</small>
                                         )
                                     }
                                 </div>
-
-                                <div className="form-group">
-                                    <label htmlFor="productMark">Marca Producto:</label>
-                                    <input
-                                    type="text"
-                                    className="form-control"
-                                    id="productMark"
-                                    name="productMark"
-                                    ref={register({required:true, minLength:2, maxLength:20})}
-                                    />
-                                    {errors.productMark && errors.productMark.type === 'required' && (
-                                    <small className="text-danger font-weight-bold">Debe ingresar la marca del producto</small>
-                                    )}
-                                    {
-                                        errors.productMark && errors.productMark.type === "minLength" && (
-                                            <small className="text-danger font-weight-bold">La marca no puede ser menor a 2 digitos</small>
-                                        )
-                                    }
-                                    {
-                                        errors.productMark && errors.productMark.type === "maxLength" && (
-                                            <small className="text-danger font-weight-bold">La marca no puede ser mayor a 20 digitos</small>
-                                        )
-                                    }
-                                </div>
-                                 
+  
                                 <div className="form-group">
                                     <label htmlFor="productPrice">Precio Producto:</label>
  
@@ -287,7 +319,7 @@ export default function CreateProduct(){
                                 </div>
 
                                 <div className="form-group">
-                                    <label htmlFor="productPrice">Stock Producto:</label>
+                                    <label htmlFor="productStock">Stock Producto:</label>
                                     <input
                                     type="number"
                                     className="form-control"
@@ -319,12 +351,13 @@ export default function CreateProduct(){
                                         {errors.productImg && errors.productImg.type === 'required' && (
                                         <small className="text-danger font-weight-bold">Debe seleccionar una imagen</small>
                                         )}
-                                </div>
+                                </div> 
             
-            
-                            <button type="submit" className="btn btn-primary btn-lg btn-block">
-                                Agregar nuevo producto
-                            </button>
+                                <button type="submit" className="btn btn-primary btn-lg btn-block">
+                                    {
+                                        id ? "Actualizar producto" : "Agregar nuevo producto"
+                                    }
+                                </button>
 
                             </div>
                         </div> 
@@ -336,4 +369,4 @@ export default function CreateProduct(){
  
     )
 }
- 
+  

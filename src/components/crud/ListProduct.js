@@ -1,5 +1,6 @@
-import React from 'react'
-import Table from 'react-bootstrap/Table'
+import React from 'react';
+import Table from 'react-bootstrap/Table';
+import {Link} from "react-router-dom";
 
 export default function ListProduct({productos, deleteProduct}) {
     console.log(productos)
@@ -11,9 +12,8 @@ export default function ListProduct({productos, deleteProduct}) {
                     <tr>
                         <th>Nro</th>
                         <th>Nombre</th>
-                        <th>Descripcion</th>
-                        <th>Marca</th>
                         <th>Precio</th>
+                        <th>Stock</th>
                         <th>Acciones</th>
                     </tr>
                 </thead>
@@ -24,23 +24,21 @@ export default function ListProduct({productos, deleteProduct}) {
                         (
                             { 
                                 id,
-                                productName,
-                                productDescription,
-                                productMark,
-                                productPrice
+                                nombre,
+                                precio,
+                                stock
                             }, 
                             i
                         ) => (
                         <tr key={i}>
                             <td>{i + 1}</td>
-                            <td>{productName}</td>
-                            <td>{productDescription}</td>
-                            <td>{productMark}</td>
-                            <td>{productPrice}</td>
+                            <td>{nombre}</td>
+                            <td>{precio}</td>
+                            <td>{stock}</td>
                             <td>
-                                <button className="btn btn-outline-info btn-sm mr-2">
+                                <Link className="btn btn-outline-info btn-sm mr-2" to={`/createproduct/${id}`}>
                                     <i className="fas fa-pen-alt"></i>
-                                </button>
+                                </Link>
                                 <button className="btn btn-outline-danger btn-sm" onClick={()=>{deleteProduct({id})}}>
                                 <i className="fas fa-trash"></i>
                                 </button>

@@ -17,10 +17,9 @@ export default function CreateSubcategory(props){
 
     const getSubcategory = async () => {
         if(id !== undefined){
-            let data = await getSubCategoriesbyId(id);
-            console.log("id", data)
-            setValue("subcategoryDesc",data[0].descripcion);
-            setValue("categoryId",data[0].categoria);
+            let data = await getSubCategoriesbyId(id); 
+            setValue("subcategoryDesc",data.descripcion);
+            setValue("categoryId",data.categoria);
         }
     }
 

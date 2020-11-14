@@ -54,7 +54,7 @@ export default function CreateCategory(props){
 
                     <div style={{width: '600px', marginTop: '5rem', marginBottom: '1rem'}}>
                         <div className="card mt-3">
-                            <div className="card-body" style={{paddingTop:'10px', paddingBottom: '0px'}}>
+                            <div className="card-body" style={{paddingTop:'10px', paddingBottom: '10px'}}>
 
                                 <h1 className="align-self-center">
                                     {

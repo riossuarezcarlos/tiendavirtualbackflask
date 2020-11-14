@@ -17,7 +17,6 @@ export const updateCategory = async (data, categoryId) => {
 }
 
 export const deleteCategory = async (categoryId) => {
-    console.log(categoryId)
     return await FetchDel(`category/${categoryId}`, 'DELETE');
 }
 

@@ -29,7 +29,7 @@ export default function ListType({types, deleteType}) {
                             <td>{i + 1}</td>
                             <td>{descripcion}</td>
                             <td>
-                            <Link className="btn btn-outline-info btn-sm mr-2" to={`/createtype/${id}`}>
+                                <Link className="btn btn-outline-info btn-sm mr-2" to={`/createtype/${id}`}>
                                     <i className="fas fa-pen-alt"></i>
                                 </Link>
                                 <button className="btn btn-outline-danger btn-sm" onClick={()=>{deleteType({id})}}>

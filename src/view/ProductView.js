@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react'
 import ListProduct from '../components/crud/ListProduct';
 import CLoading from "../components/CLoading";
-import { getProducts, deleteProductById } from '../services/productfirebase';
+import { getProducts, deleteProduct } from '../services/product';
 import {Link} from "react-router-dom";
 import Swal from "sweetalert2";
 
@@ -16,7 +16,7 @@ export default function ProductView() {
         setCargando(false);
     }  
 
-    const deleteProduct = ({id}) => {
+    const removeProduct = ({id}) => {
         Swal.fire({
             icon: "warning",
             title: "¿Está seguro de eliminar el producto?",
@@ -30,7 +30,7 @@ export default function ProductView() {
             }
             console.log("Eliminar")
             setCargando(true); //comienzo a cargar porque mi peticion demora
-            const productoEliminado = await deleteProductById(id); //borro, va a demorar
+            const productoEliminado = await deleteProduct(id); //borro, va a demorar
             console.log(productoEliminado)
             getProduct();
         }
@@ -54,7 +54,7 @@ export default function ProductView() {
                         <div className="ml-auto mb-3 mt-2">
                             <Link className="btn btn-primary btn-sm ml-auto" to={`/createproduct`}>Agregar Producto</Link>
                         </div>
-                        <ListProduct  productos={productos} deleteProduct={deleteProduct}/> 
+                        <ListProduct  productos={productos} deleteProduct={removeProduct}/> 
                     </div>
                 )
 

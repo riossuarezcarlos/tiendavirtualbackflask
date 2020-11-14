@@ -16,7 +16,6 @@ export default function CreateCategory(props){
     const getCategory = async () => {
         if(id !== undefined){
             let data = await getCategoriesbyId(id);
-            console.log(data[0].descripcion);
             setValue("categoryDesc",data.descripcion);
         }
     }
@@ -57,11 +56,14 @@ export default function CreateCategory(props){
 
                     <div style={{width: '600px', marginTop: '5rem', marginBottom: '1rem'}}>
                         <div className="card mt-3">
-                            <div className="card-body" style={{paddingTop:'10px', paddingBottom: '0px'}}>
-                                {
-                                    id ? "Actualizar categoria" : "Agregar nueva categoria"
-                                }
-                            
+                            <div className="card-body" style={{paddingTop:'10px', paddingBottom: '10px'}}>
+
+                                <h1 className="align-self-center">
+                                    {
+                                        id ? "Actualizar categoria" : "Agregar nueva categoria"
+                                    }
+                                </h1>
+                                
                                 <div className="form-group">
                                     <label htmlFor="categoryDesc">Nombre de Categoria:</label>
                                     <input

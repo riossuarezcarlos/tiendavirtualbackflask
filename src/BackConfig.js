@@ -1,4 +1,5 @@
 export const URL_BACK = 'https://backflaskgrupo4.herokuapp.com/';
+// export const URL_BACK = 'http://127.0.0.1:5000/';
 
 export const FetchGet = async (endpoint) => {
     const response = await fetch(URL_BACK + endpoint);
@@ -8,6 +9,11 @@ export const FetchGet = async (endpoint) => {
 }
 
 export const FetchConf = async (endpoint, method, data) => {
+
+    console.log(endpoint)
+    console.log(method)
+    console.log(data)
+
 
     const config = {
         method: method,

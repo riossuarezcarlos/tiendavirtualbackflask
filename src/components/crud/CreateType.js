@@ -20,20 +20,11 @@ export default function CreateType(props){
     
     const getProductType = async () => {
         if(id !== undefined){
-            let data = await getProductTypesbyId(id);
-            console.log("object", data.subcategoria)
-            let subcategoria = await getSubCategoriesbyId(data.subcategoria) 
-
-            let categoryId = 0;
-            subcategoria.map((subcat) => {
-                setValue("categoryId",subcat.categoria);
-                categoryId = subcat.categoria;
-            })
-
-            await getSubCategory(categoryId)
-
+            let data = await getProductTypesbyId(id); 
+            await getSubCategory(data.categoria) 
+            setValue("categoryId",data.categoria);
             setValue("subcategoryId",data.subcategoria);
-            setValue("producttypeDesc",data.descripcion);
+            setValue("producttypeDesc",data.descripcion);  
         }
     }
 
@@ -65,9 +56,7 @@ export default function CreateType(props){
 
     const getSubCategory = async (categoryId) => { 
         let data = await getCategoriesbyId(categoryId); 
-        data.map((category) => {
-            setSubCategories(category.subcategorias);
-        })
+        setSubCategories(data.subcategorias);
     } 
   
     //* Validar Select **/

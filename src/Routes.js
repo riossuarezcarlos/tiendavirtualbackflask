@@ -30,9 +30,7 @@ export default function Routes() {
         <Fragment>
             {/* <Redirect from='/' to='/home' />  */}
             <Route exac path="/home" component={HomeView} />
-            <Route exac path="/product" component={ProductView} />
-            <Route exac path="/productdetail/:id" component={DetailView} />
-            <Route exac path="/createproduct" component={CreateProduct} />
+
             <Route exact path="/login" component={LoginView} />
             <Route exact path="/register" component={Registerview} />
             <Route exact path="/profile" component={Profileview} />
@@ -43,6 +41,9 @@ export default function Routes() {
             <Route exac path="/orderdetail/:id" component={OrderDetailView} /> 
             <Route exac path="/search/:subCategoryId/:subCategoryName" component={SearchView} /> 
 
+            <Route exac path="/product" component={ProductView} />
+            <Route exac path="/createproduct/:id?" component={CreateProduct} />
+            <Route exac path="/productdetail/:id" component={DetailView} />
             <Route exact path="/category" component={CategoryView} />
             <Route exact path="/createcategory/:id?" component={CreateCategory} />
             <Route exact path="/subcategory" component={SubcategoryView} /> 
