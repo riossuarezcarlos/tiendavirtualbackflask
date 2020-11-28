@@ -171,7 +171,7 @@ const handleCloseConf = () => {
           showConfirmButton: false,
           timer: 2000,
         }).then(() => {
-          history.push("/");
+          history.push("/home");
         });
       }
       else{
