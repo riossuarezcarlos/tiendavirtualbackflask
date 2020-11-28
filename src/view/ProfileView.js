@@ -1,7 +1,7 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { AuthContext } from '../context/authContext' ;
-import { getUserbyId, modifyUser } from '../services/user';
-import { getAddressbyId, createAddress, modifyAddress } from '../services/address';
+import { getUser, modifyUser } from '../services/user';
+import { getAddress, createAddress, modifyAddress } from '../services/address';
 
 export default function ProfileView() {
 
@@ -21,68 +21,61 @@ export default function ProfileView() {
     const [addressId, seetAddressId] = useState(""); 
     const [indicadorAddress, setIndicadorAddress] = useState(false); 
   
-    const obtenerUserId = () => {
-        let userId;
-        user !== null ? 
-            userId= user.uid
-         :  
-            userId = 0;
-
-        return userId;
-    }
-
     const showUser = async () => {
-        let userFireId = obtenerUserId();        
-        let dataUser = await getUserbyId(userFireId);
+        
+        let dataUser = await getUser(user.tokens.acceso);
         let userIdTemp = '';
         let addressIdTemp = '';
-        dataUser.map((item) => {
-            userIdTemp = item.id;
-            setCorreo(item.user_email);
-            setNombre(item.user_name);
-            setApellido(item.user_lastname);
-            setDocumento(item.user_dni);
-            setTelefono(item.user_phone); 
+        setCorreo(user.usuCorreo);
+
+        if (dataUser){
+            userIdTemp = dataUser.usuId;
+            setNombre(dataUser.usuNombre);
+            setApellido(dataUser.usuApellido);
+            setDocumento(dataUser.usuDni);
+            setTelefono(dataUser.usuCel);
             setUserId(userIdTemp);
-        }); 
-        let dataAddress = await getAddressbyId(userIdTemp);
-        dataAddress.map((item) => {
-            addressIdTemp = item.id;
-            setDireccion(item.address_name);
-            setNumero(item.address_number);
-            setReferencia(item.address_reference);
-            setPersona(item.address_person);
+        }
+
+        let dataAddress = await getAddress(userIdTemp);
+        
+        if (dataAddress){
+            addressIdTemp = dataAddress.dirId;
+            setDireccion(dataAddress.dirDes);
+            setNumero(dataAddress.dirNum);
+            setReferencia(dataAddress.dirRef);
+            setPersona(dataAddress.dirPer);
             seetAddressId(addressIdTemp);
             setIndicadorAddress(true);
-        }); 
+        }
+        
     }
 
     const updateUser = async (ev) => {
         ev.preventDefault();
 
         let objUser = {
-            user_dni: documento,
-            user_email: correo,
-            user_lastname: apellido,
-            user_name: nombre,
-            user_phone: telefono
+            usuNombre: nombre,
+            usuApellido: apellido,
+            usuDni: documento,
+            usuCel: telefono
         } 
-        
-        await modifyUser(userId, objUser);
+ 
+        await modifyUser(objUser, user.tokens.acceso);
 
         let objAddress = {
-            address_name: direccion,
-            address_number: numero,
-            address_reference: referencia,
-            address_person: persona,
-            user_id: userId
+            dirDes: direccion,
+            dirNum: numero,
+            dirPer: persona,
+            dirRef: referencia,
+            usuId: userId
         } 
         
         indicadorAddress === false
         ?
             await createAddress(objAddress)
         :
-            await modifyAddress(addressId, objAddress)
+            await modifyAddress(objAddress, addressId)
 
         window.history.back(); 
     } 

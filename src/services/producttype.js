@@ -1,15 +1,15 @@
-import {FetchGet, FetchConf, FetchDel} from '../BackConfig';
+import {URL_BACK_FLASK, FetchGet, FetchConf, FetchDel} from '../BackConfig';
 
 import fire from '../FirestoreConfig' 
 const fireDB =  fire.firestore();
  
 
 export const getProductTypes= async () => {
-    return await FetchGet(`producttype`);
+    return await FetchGet(URL_BACK_FLASK, `producttype`);
 }
  
 export const getProductTypesbyId= async (producttypeId) => {
-    return await FetchGet(`producttype/${producttypeId}`);
+    return await FetchGet(URL_BACK_FLASK, `producttype/${producttypeId}`);
 }
  
 
@@ -27,13 +27,13 @@ export const getProductTypesBySubCategory = async (subCategoryId) => {
  
 
 export const createType = async (data) => {
-    return await FetchConf(`producttype`, 'POST', data);
+    return await FetchConf(URL_BACK_FLASK, `producttype`, 'POST', data);
 }
 
 export const updateType = async (data, producttypeId) => {
-    return await FetchConf(`producttype/${producttypeId}`, 'PUT', data);
+    return await FetchConf(URL_BACK_FLASK, `producttype/${producttypeId}`, 'PUT', data);
 }
 
 export const deleteType = async (producttypeId) => {
-    return await FetchDel(`producttype/${producttypeId}`, 'DELETE');
+    return await FetchDel(URL_BACK_FLASK, `producttype/${producttypeId}`, 'DELETE');
 }

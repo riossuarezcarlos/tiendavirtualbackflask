@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react'
-import { ingresar } from '../services/authService';
+import { login } from '../services/user';
 import {AuthContext} from '../context/authContext';
 
 export default function LoginView() {
@@ -9,15 +9,23 @@ export default function LoginView() {
     const [correo, setCorreo] = useState('');
     const [password, setPassword] = useState('');
 
-    const loguear = (e) => {
+    const loguear = async (e) => {
         e.preventDefault();
-        ingresar(correo, password)
-        .then((rpta) => {
-            setAuthUser(rpta);  
-        })
-        .catch(error => {
-            console.log(error);
-        })
+
+        let data = {
+            'usuCorreo' : correo,
+            'password' : password
+        }
+
+        let usuario = await login(data);
+
+        if (usuario) {
+            setAuthUser(usuario);  
+        }
+        else{
+            console.log("Usuario o contraseña incorrectos");
+        }
+        
     }
 
     return (
@@ -28,7 +36,7 @@ export default function LoginView() {
                     <h2 className="card-title">
                         Login
                     </h2>
-                    <form onSubmit={(e) => {loguear(e)}}>
+                    <form onSubmit={loguear}>
                     <div className="form-group">
                             <label>Correo:</label>
                             <input value={correo} onChange={(e) => {setCorreo(e.target.value);}} type="email" className="form-control"/>

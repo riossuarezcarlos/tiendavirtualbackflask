@@ -1,3 +1,5 @@
+import {URL_BACK_DJANGO, FetchGetToken, FetchConf, FetchConfToken} from '../BackConfig';
+
 import fire from '../FirestoreConfig'
  
 const fireDB =  fire.firestore();
@@ -14,13 +16,24 @@ const getUserbyId = async (userId) => {
     return Users;
 }
 
-const createUser =  async (user) => {
-    return await fireDB.collection("user").add(user);
+export const getUser = async (token) => {
+    return await FetchGetToken(URL_BACK_DJANGO, 'perfil', token);
+}
+   
+export const createUser = async (data) => { 
+    return await FetchConf(URL_BACK_DJANGO, `registro`, 'POST', data); 
 }
 
-const modifyUser =  async (id, user) => {
-    console.log("id", id);
-    return await fireDB.collection("user").doc(id).update(user);
+export const login = async(data) => {
+    return await FetchConf(URL_BACK_DJANGO, 'login', 'POST', data);
 }
 
-export { getUserbyId, createUser, modifyUser };
+export const logout = async(data, token) => {
+    return await FetchConfToken(URL_BACK_DJANGO, 'logout', 'POST', data, token);
+}
+  
+export const modifyUser = async (data, token) => {
+    return await FetchConfToken(URL_BACK_DJANGO, 'perfil', 'PUT', data, token);
+}
+  
+export { getUserbyId };

@@ -25,7 +25,7 @@ import clsx from 'clsx';
 
 import CNavSide from './CNavSide';
 
-import { salir } from "../services/authService";
+import { logout } from "../services/user";
 import Swal from "sweetalert2";
 import { useHistory } from "react-router-dom";
 
@@ -144,19 +144,26 @@ const handleCloseConf = () => {
   // Fin CategoryMenu
 
 
-  const logout = () => {
+  const cerraSesion = () => {
     Swal.fire({
       icon: "warning",
       title: "Desea salir?",
       showConfirmButton: true,
       confirmButtonText: "Si, Salir",
       showCancelButton: true,
-    }).then((resultSwal) => {
+    }).then( async (resultSwal) => {
       if (resultSwal.isDismissed === true) {
         //si es que doy click a cancelar no haga nada
         return;
       }
-      salir().then(() => {
+
+      let data = {
+        'refresh' : user.tokens.refresh
+      } 
+      console.log("1")
+      let {ok} = await logout(data, user.tokens.acceso);
+      
+      if (ok) {
         setAuthUser(null);
         Swal.fire({
           icon: "success",
@@ -166,7 +173,11 @@ const handleCloseConf = () => {
         }).then(() => {
           history.push("/");
         });
-      });
+      }
+      else{
+        console.log("Error al cerrar sessión")
+      }
+ 
     });
     //---------------------
   };
@@ -326,7 +337,7 @@ const handleCloseConf = () => {
                               </StyledMenuItem> 
                             </Link>
                             <Link to="">
-                              <StyledMenuItem onClick={()=>{logout()}}>
+                              <StyledMenuItem onClick={()=>{cerraSesion()}}>
                                   <ListItemIcon> 
                                       <i className="fas fa-sign-out-alt fa-2x" />
                                   </ListItemIcon>

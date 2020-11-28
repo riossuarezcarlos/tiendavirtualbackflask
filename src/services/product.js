@@ -1,14 +1,14 @@
-import {FetchGet, FetchConf, FetchDel} from '../BackConfig';
+import {URL_BACK_FLASK, FetchGet, FetchConf, FetchDel} from '../BackConfig';
 import fire from '../FirestoreConfig'
  
 const fireDB =  fire.firestore();
  
 export const getProducts = async () => {
-    return await FetchGet(`product`);
+    return await FetchGet(URL_BACK_FLASK, `product`);
 } 
 
 export const getProductbyId = async (productId) => { 
-    return await FetchGet(`product/${productId}`); 
+    return await FetchGet(URL_BACK_FLASK, `product/${productId}`); 
 }
 
 export const searchProducts = async (producttypes, desde, hasta) => {
@@ -42,11 +42,11 @@ export const getProductsByLabel = async (labelCod) => {
 }
 
 export const createProduct = async (data) => {
-    return await FetchConf(`product`, 'POST', data); 
+    return await FetchConf(URL_BACK_FLASK, `product`, 'POST', data); 
 }
 
 export const updateProduct = async (data, productId) => {
-    return await FetchConf(`product/${productId}`, 'PUT', data);
+    return await FetchConf(URL_BACK_FLASK, `product/${productId}`, 'PUT', data);
 }
 
 export const subirImagen = (imagen, refStorage) => {
@@ -70,6 +70,6 @@ export const subirImagen = (imagen, refStorage) => {
 }
 
 export const deleteProduct = async (productId) => {
-    return await FetchDel(`product/${productId}`, 'DELETE'); 
+    return await FetchDel(URL_BACK_FLASK, `product/${productId}`, 'DELETE'); 
 }
  

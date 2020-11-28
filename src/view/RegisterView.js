@@ -1,33 +1,35 @@
 import React, { useState } from 'react'
-import { registro } from '../services/authService';
 import { createUser } from '../services/user';
+
+import Swal from 'sweetalert2';
 
 export default function RegisterView() {
 
     const [correo, setCorreo] = useState('');
     const [password, setPassword] = useState('');
 
-    const registrar = (e) => {
+    const crearUsuario = async (e) => {
         e.preventDefault();
-        registro(correo, password)
-        .then(async (rpta) => {
 
-            let objUser = {
-                user_dni: '',
-                user_email: correo,
-                user_lastname: '',
-                user_fireid: rpta,
-                user_name: '',
-                user_phone: ''
-            }
-            
-            let user = await createUser(objUser);
-            console.log("Usuario Creado", user);
-            window.history.back(); 
+        let data = {
+            'usuCorreo' : correo,
+            'password' : password,
+            "is_superuser": true,
+            "is_staff": true
+        }
+
+        let usuario = await createUser(data);
+
+        //Mostramos el alert
+        Swal.fire({
+            icon: "success",
+            title: `usuario ${usuario.usuCorreo} creado correctamente`,
+            showConfirmButton: false,
+            timer: 1500
         })
-        .catch(error => {
-            console.log(error);
-        })
+ 
+        window.history.back(); 
+
     }
 
     return (
@@ -38,7 +40,7 @@ export default function RegisterView() {
                     <h2 className="card-title">
                         Registro
                     </h2>
-                    <form onSubmit={(e) => {registrar(e)}}>
+                    <form onSubmit={crearUsuario}>
                         <div className="form-group">
                             <label>Correo:</label>
                             <input value={correo} onChange={(e) => {setCorreo(e.target.value);}} type="email" className="form-control"/>

@@ -1,8 +1,10 @@
+import {URL_BACK_DJANGO, FetchGet, FetchConf, FetchDel} from '../BackConfig';
+
 import fire from '../FirestoreConfig'
  
 const fireDB =  fire.firestore();
 
-const getAddressbyId = async (userId) => {
+export const getAddressbyId = async (userId) => {
     let Address = [];
     await fireDB.collection("address").where("user_id", "==", userId).get()
     .then((snapShots) => {
@@ -14,12 +16,15 @@ const getAddressbyId = async (userId) => {
     return Address;
 }
 
-const createAddress =  async (address) => {
-    return await fireDB.collection("address").add(address);
+
+export const getAddress = async (userId)=> {
+    return await FetchGet(URL_BACK_DJANGO, `direccionu/${userId}`);
 }
 
-const modifyAddress =  async (id, adress) => {
-    return await fireDB.collection("address").doc(id).update(adress);
+export const createAddress =  async (data) => {
+    return await FetchConf(URL_BACK_DJANGO, `direccion`, 'POST', data);
 }
 
-export { getAddressbyId, createAddress, modifyAddress };
+export const modifyAddress =  async (data, adressId) => {
+    return await FetchConf(URL_BACK_DJANGO, `direccion/${adressId}`, 'PUT', data);
+}

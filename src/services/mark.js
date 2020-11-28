@@ -1,23 +1,23 @@
-import {FetchGet, FetchConf, FetchDel} from '../BackConfig';
+import {URL_BACK_FLASK, FetchGet, FetchConf, FetchDel} from '../BackConfig';
 
 export const getMarks = async () => {
-    return await FetchGet(`mark`);
+    return await FetchGet(URL_BACK_FLASK, `mark`);
 }
 
 export const getMarkbyId = async (markId) => {
-    return await FetchGet(`mark/${markId}`);
+    return await FetchGet(URL_BACK_FLASK, `mark/${markId}`);
 }
 
 export const createMark = async (data) => {
-    return await FetchConf(`mark`, 'POST', data);
+    return await FetchConf(URL_BACK_FLASK, `mark`, 'POST', data);
 }
 
 export const updateMark = async (data, markId) => {
-    return await FetchConf(`mark/${markId}`, 'PUT', data);
+    return await FetchConf(URL_BACK_FLASK, `mark/${markId}`, 'PUT', data);
 }
 
 export const deleteMark = async (markId) => {
-    return await FetchDel(`mark/${markId}`, 'DELETE');
+    return await FetchDel(URL_BACK_FLASK, `mark/${markId}`, 'DELETE');
 }
 
  

@@ -7,8 +7,8 @@ const AuthContextProvider = (props) => {
     const history = useHistory();
     const [user, setUser] = useState(null);
 
-    const setAuthUser = (uid) => {
-        setUser(uid); 
+    const setAuthUser = (user) => {
+        setUser(user); 
         return history.push('/home');
     }
 
