@@ -207,7 +207,7 @@ const handleCloseConf = () => {
           </Fragment>
 
           <Navbar.Brand href="/home">
-              <img src="https://riossuarezcarlos.github.io/proyectogrupo4/src/img/logo.png" alt="..."  className="logo"/>
+              <img src="https://rscarlos.github.io/proyectogrupo4/src/img/logo.png" alt="..."  className="logo"/>
           </Navbar.Brand>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav"> 

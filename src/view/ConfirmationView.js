@@ -80,7 +80,7 @@ export default function ConfirmationView() {
             </div>
 
             <div className="d-flex justify-content-center clogo">
-                <img src="https://riossuarezcarlos.github.io/proyectogrupo4/src/img/logo.png" alt="..."  className="logo"/> 
+                <img src="https://rscarlos.github.io/proyectogrupo4/src/img/logo.png" alt="..."  className="logo"/> 
             </div>
 
             </div>
