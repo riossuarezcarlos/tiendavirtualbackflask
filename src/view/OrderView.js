@@ -1,39 +1,21 @@
 import React, {useContext, useEffect, useState} from 'react';
 import {AuthContext} from '../context/authContext';
 import COrder from '../components/COrder';
-import { getUserbyId } from '../services/user';
+import { getUser } from '../services/user';
 import {getOrderByUser} from '../services/order';
 import { Link } from 'react-router-dom';
 
-let userIdFire = '';
 export default function OrderView() {
     const { user } = useContext(AuthContext);
 
     const [orders, setOrders] = useState([]);
    
-    const obtenerUserId = () => {
-        user !== null ? 
-         userIdFire= user.uid
-        :  
-         userIdFire = 0;
-  
-        return userIdFire;
-      } 
-
       const getData = async () => {
-        obtenerUserId();
-        let dataUser = await getUserbyId(userIdFire);
-        let userId = '';
-
-        dataUser.map((item) => {
-            userId = item.id;
-        });  
-
-        let dataOrder = await getOrderByUser(userId);
-        setOrders(dataOrder);
- 
-      }
-
+        let dataUser = await getUser(user.tokens.acceso); 
+        let dataOrder = await getOrderByUser(dataUser.usuId);
+        console.log("OrderView", dataOrder)
+        setOrders(dataOrder); 
+      } 
 
       useEffect(() => {
           getData();
@@ -51,7 +33,7 @@ export default function OrderView() {
                                     Pedido N° {order.id}    |   Fecha de pedido {order.orderDate}| Total {order.orderTotal}
                                 </div>
                                 <div className="m-2"> 
-                                    <Link className="btn btn-outline-primary mr-4" to={`/orderdetail/${order.id}`}>Ver Pedido</Link> 
+                                    <Link className="btn btn-outline-primary mr-4" to={`/orderdetail/${order._id}`}>Ver Pedido</Link> 
                                 </div>
                             </div> 
                             <COrder key={i} order={order}/>

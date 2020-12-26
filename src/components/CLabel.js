@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import CProduct from './CProduct';
-import { getProductsByLabel } from '../services/productfirebase';
+import { getProductsByLabel } from '../services/product';
 
 export default function CCLabel({label}) {
  
@@ -9,18 +9,20 @@ export default function CCLabel({label}) {
 
     const getProducts = async () => {
         let data = await getProductsByLabel(label.id);
-        setProductos(data); 
+        if (data) {
+            setProductos(data);     
+        }
     }
 
     useEffect(() => {
         getProducts();
-    }) 
+    }, []) 
 
     return (
         <div>
             <div>
                 <i className="fas fa-caret-right fa-2x" />
-                <span style={{ color: 'gray', fontSize: '26px', paddingLeft: '20px', fontWeight: 'bolder' }}>{label.labelName}</span>
+                <span style={{ color: 'gray', fontSize: '26px', paddingLeft: '20px', fontWeight: 'bolder' }}>{label.descripcion}</span>
             </div>
             <div className="row mt-2 d-flex justify-content-center">
             {

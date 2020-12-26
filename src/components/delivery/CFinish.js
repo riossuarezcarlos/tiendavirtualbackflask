@@ -21,13 +21,41 @@ export default function CFinish() {
         let fecha = Math.floor(Date.now() / 1000);
         let myorder = order;
         let orderId = '';
-        await createOrder({...myorder, orderDate : fecha})
-        .then((orderC) => {
-            orderId = orderC.id;
-            carrito.map( async (car) => {
-                await createOrderDetail({...car, orderId :  orderC.id});
-            }) 
+        console.log(order)
+        let dataOrder = {
+            "user_phone": order.user_phone,
+            "user_name": order.user_name,
+            "user_email": order.user_email,
+            "userId": order.userId,
+            "orderTotal": order.orderTotal,
+            "orderDate": fecha,
+            "card_year": order.card_year,
+            "card_number": order.card_number,
+            "card_name": order.card_name,
+            "card_month": order.card_month,
+            "card_ccv": order.card_ccv,
+            "address_name": order.address_name,
+            "address_reference": order.address_reference,
+            "address_number": order.address_number,
+            "order_detail" : []
+        }
+        
+        let orderDetail = []
+        carrito.map( async (car) => {
+            let objDetail = {
+                "productCant": car.productCant, 
+                "productId": car.productId,
+                "productTotal": car.productTotal,
+                "productName": car.productName,
+                "productImg": car.productImg
+            }
+            orderDetail.push(objDetail);
         }) 
+
+        let objOrder = {...dataOrder, order_detail: orderDetail}
+ 
+        let data = await createOrder(objOrder); 
+        console.log(data);
     }
 
     useEffect( () => {

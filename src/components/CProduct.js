@@ -16,12 +16,12 @@ export default function CProduct(product) {
         e.stopPropagation();
         let productoAnadir = {
             productId: product.product.id,
-            productName: product.product.productName, 
-            productPrice: product.product.productPrice, 
-            productMark: product.product.productMark, 
-            productImg: product.product.productImg, 
+            productName: product.product.descripcion, 
+            productPrice: product.product.precio, 
+            // productMark: product.product.productMark, 
+            productImg: product.product.img, 
             productCant: cantidad, 
-            productTotal: product.product.productPrice * cantidad 
+            productTotal: product.product.precio * cantidad 
         }
  
         anadirProducto(productoAnadir);
@@ -36,16 +36,16 @@ export default function CProduct(product) {
     
     return (   
             <div className="card m-1 p-0"> 
-                <Card.Img variant="top" src={product.product.productImg} alt="..." className="img" />
+                <Card.Img variant="top" src={product.product.img} alt="..." className="img" />
                 <div className="card-body">
-                    <Card.Title>{product.product.productMark}</Card.Title>
-                    <Card.Text>{product.product.productName}</Card.Text>
-                    <Card.Text className="price">Precio: {product.product.productPrice}</Card.Text>
+                    {/* <Card.Title>{product.product.productMark}</Card.Title> */}
+                    <Card.Text>{product.product.descripcion}</Card.Text>
+                    <Card.Text className="price">Precio: {product.product.precio}</Card.Text>
                     <Count cantidadProductos={cantidad} actualizarCantidad={setCantidad}/>
                     <Link className="btn btn-primary btn-sm m-2" to={`/productdetail/${product.product.id}`}>Ver Detalle</Link> 
                      
                     {
-                        product.product.productStock !== 0 
+                        product.product.stock !== 0 
                         ?
                         (
                             <button className="btn btn-primary btn-sm" onClick={(e) => {anadirAlCarrito(e)}}>Agregar al carrito</button>

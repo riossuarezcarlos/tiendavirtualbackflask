@@ -1,11 +1,12 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { getUserbyId } from '../../services/user';
 import { CarritoContext } from '../../context/carritoContext';
+import { AuthContext } from '../../context/authContext';
+import { getUser } from '../../services/user';
 import { useForm } from "react-hook-form";
 
 export default function CUserData({userId, handleNext}) { 
- 
-    const { order, setOrderUser } = useContext(CarritoContext); 
+    const { user } = useContext(AuthContext);  
+    const {  setOrderUser } = useContext(CarritoContext); 
 
     let { register, handleSubmit, errors} = useForm();
 
@@ -16,17 +17,18 @@ export default function CUserData({userId, handleNext}) {
     const [telefono, setTelefono] = useState(""); 
  
     const getUserData = async () => {
-        let dataUser = await getUserbyId(userId);
-        dataUser.map((item) => {
-            setCorreo(item.user_email);
-            setNombre(item.user_name);
-            setApellido(item.user_lastname);
-            setDocumento(item.user_dni);
-            setTelefono(item.user_phone); 
+        // let dataUser = await getUserbyId(userId);
+        let dataUser = await getUser(user.tokens.acceso);
+        setCorreo(user.usuCorreo);
+        // dataUser.map((item) => {
+            setNombre(dataUser.usuNombre);
+            setApellido(dataUser.usuApellido);
+            setDocumento(dataUser.usuDni);
+            setTelefono(dataUser.usuCel); 
             
-            setOrderUser(item.id, item.user_email, item.user_name + ' ' + item.user_lastname, item.user_phone);
+            setOrderUser(dataUser.usuId, user.usuCorreo, dataUser.usuNombre + ' ' + dataUser.usuApellido, dataUser.usuCel);
     
-        });  
+        // });    
     }
 
     const manejarSubmit  = async (data) => {    

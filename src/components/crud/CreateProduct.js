@@ -54,26 +54,24 @@ export default function CreateProduct(props){
         e.preventDefault();
         let  miImagen = e.target.files[0]; 
         imagenProducto = miImagen;
+        console.log(imagenProducto.name)
     }
 
     const manejarSubmit  = async (data) => {    
  
-        let uuid =  uuidv4();
-        const refStorage = storage.ref(`img/${uuid}`);
+        let uuid =  uuidv4(); 
 
         let product = {...data, productPrice: parseFloat(data.productPrice)}
  
         // Registrar la imagen solo si se ha seleccionado una
-
-        subirImagen(imagenProducto, refStorage)
-        .then(async (urlImagen) => {
+        let dataImage = await subirImagen(imagenProducto, imagenProducto.name)
+        if (dataImage.ok === true) {
             //Crear el producto
-            console.log(urlImagen)
             if(id === undefined){ 
-                await createProduct({...product, productImg: urlImagen}); 
+                await createProduct({...product, productImg: dataImage.content}); 
 
             } else {
-                await updateProduct({...product, productImg: urlImagen}, id); 
+                await updateProduct({...product, productImg: dataImage.content}, id); 
             }
             Swal.fire({
                 icon: "success",
@@ -82,8 +80,9 @@ export default function CreateProduct(props){
                 timer: 1000
             });
             return history.push('/product'); 
-        })  
-        
+        }else{
+            console.log("Error al subir la imagen")
+        }  
 
     }
   

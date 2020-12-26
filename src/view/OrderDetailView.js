@@ -7,18 +7,19 @@ let userIdFire = '';
 export default function OrderDetailView(props) {
 
     //recuperar el Id
-    const orderId = props.match.params.id;
+    const orderId = props.match.params.id; 
+    const [orders, setOrder] = useState([]);
+ 
+    let order = [];
+    const getData = async () => {
+        let dataOrder = await getOrderById(orderId);  
+        order.push(dataOrder); 
+        setOrder(order);
+    } 
 
-    const [orders, setOrders] = useState([]);
-  
-      const getData = async () => {
-        let dataOrder = await getOrderById(orderId); 
-        setOrders(dataOrder);
-      } 
-
-      useEffect(() => {
-          getData();
-      }, [])
+    useEffect(() => {
+        getData(); 
+    }, [])
 
     return (
         <div className="d-flex justify-content-center">
@@ -26,29 +27,31 @@ export default function OrderDetailView(props) {
                 <h2>Mis Pedidos</h2>
                 {
                     orders.map((order, i) => (
-                    <div className="mt-4" key={i}>
-                        <div  className="card cabecera">
-                            <div className="m-2 general">
-                                Pedido N° {order.id}    |   Fecha de pedido {order.orderDate}| Total {order.orderTotal}
+                        <div className="mt-4" key={i} >
+                            <div  className="card cabecera">
+                                <div className="m-2 general">
+                                    Pedido N° {order._id}    |   Fecha de pedido {order.orderDate}| Total {order.orderTotal}
+                                </div> 
                             </div> 
+                            <div className="card d-flex flex-row">
+                                <div style={{marginLeft:'10px', marginRight: '30px'}}>
+                                    <h5>Datos del usuario</h5>
+                                    <p>{order.user_name}</p>
+                                    <p>{order.user_email}</p>
+                                    <p>{order.user_phone}</p>  
+                                </div> 
+                                <div>
+                                    <h5>Datos de la entrega</h5>
+                                    <p>{order.address_name}</p>
+                                    <p>{order.address_number}</p>
+                                    <p>{order.address_reference}</p> 
+                                </div> 
+                            </div>
+                            
+                            <COrder key={i}   order={order}/>  
+                        
                         </div> 
-                        <div className="card d-flex flex-row">
-                            <div style={{marginLeft:'10px', marginRight: '30px'}}>
-                                <h5>Datos del usuario</h5>
-                                <p>{order.user_name}</p>
-                                <p>{order.user_email}</p>
-                                <p>{order.user_phone}</p>  
-                            </div> 
-                            <div>
-                                <h5>Datos de la entrega</h5>
-                                <p>{order.address_name}</p>
-                                <p>{order.address_number}</p>
-                                <p>{order.address_reference}</p> 
-                            </div> 
-                        </div>
-                        <COrder key={i} order={order}/>
-                    </div>
-                    ))
+                     ))
                 }
                 
             </div>

@@ -6,8 +6,6 @@ const createOrderDetail =  async (orderDetail) => {
     return await fireDB.collection("orderdetail").add(orderDetail);
 }
 
-
-
 const getOrderDetailByOrder = async (orderId) => {
     let products = [];
     await fireDB.collection("orderdetail").where("orderId","==",orderId).get()

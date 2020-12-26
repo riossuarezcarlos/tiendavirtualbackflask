@@ -1,7 +1,7 @@
-import React, {useState, useEffect, useContext} from 'react';
-import { getAddressbyId } from '../../services/address';
+import React, {useState, useEffect, useContext} from 'react'; 
 import { CarritoContext } from '../../context/carritoContext';
 import { useForm } from "react-hook-form";
+import { getAddress } from '../../services/address';
 
 export default function CDeliveryData({handleNext}) { 
 
@@ -16,17 +16,15 @@ export default function CDeliveryData({handleNext}) {
 
     const getUserData = async () => { 
 
-        let dataAddress = await getAddressbyId(order.userId);
-        dataAddress.map((item) => {
-            setDireccion(item.address_name);
-            setNumero(item.address_number);
-            setReferencia(item.address_reference);
-            setPersona(item.address_person);
-
-            setOrderDelivery(item.address_name, item.address_number, item.address_reference);  
-        }); 
+        let dataAddress = await getAddress(order.userId);
+        console.log(dataAddress)
+        setDireccion(dataAddress.dirDes);
+        setNumero(dataAddress.dirNum);
+        setReferencia(dataAddress.dirRef);
+        setPersona(dataAddress.dirPer); 
+        setOrderDelivery(dataAddress.dirDes, dataAddress.dirNum, dataAddress.dirRef);  
  
-    }
+    } 
 
     const manejarSubmit  = async (data) => {    
         handleNext();

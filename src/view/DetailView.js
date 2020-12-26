@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react' 
-import { getProductbyId } from '../services/productfirebase' 
+import { getProductbyId } from '../services/product' 
 import { CarritoContext } from '../context/carritoContext'
 import CLoading from '../components/CLoading'
 import Count from '../components/CCount'
@@ -19,19 +19,20 @@ export default function DetailView(props) {
     //Obtener productos
     const getProduct = async () => {
         let productoObtenido = await getProductbyId(productoId);
-        setMiProducto(productoObtenido[0]); 
-        setCargando(false);
+
+        setMiProducto(productoObtenido); 
+        setCargando(false); 
     }
 
     const anadirAlCarrito = () => {
         let productoAnadir = {
             productId: miProducto.id,
-            productName: miProducto.productName, 
-            productPrice: miProducto.productPrice, 
-            productMark: miProducto.productMark, 
-            productImg: miProducto.productImg, 
+            productName: miProducto.descripcion, 
+            productPrice: miProducto.precio, 
+            // productMark: miProducto.productMark, 
+            productImg: miProducto.img, 
             productCant: cantidad, 
-            productTotal: miProducto.productPrice * cantidad
+            productTotal: miProducto.precio * cantidad
         }
         anadirProducto(productoAnadir);
 
@@ -58,16 +59,16 @@ export default function DetailView(props) {
                     <div style={{marginTop: '5rem', marginBottom: '1rem'}}>
                     <div className="row">
                         <div className="col-12 col-lg-6">
-                            <img src={miProducto.productImg} alt="..." className="img-fluid"/>
+                            <img src={miProducto.img} alt="..." className="img-fluid"/>
                         </div>
                         <div className="col-12 col-lg-6">
-                            <h1>{miProducto.productMark}</h1>
-                            <h1>{miProducto.productName}</h1>
-                            <h2>Precio: {miProducto.productPrice}</h2> 
+                            {/* <h1>{miProducto.productMark}</h1> */}
+                            <h1>{miProducto.descripcion}</h1>
+                            <h2>Precio: {miProducto.precio}</h2> 
                             <Count cantidadProductos={cantidad} actualizarCantidad={setCantidad}/>
 
                             {
-                                miProducto.productStock !== 0 
+                                miProducto.stock !== 0 
                                 ?
                                 (
                                     <button className="btn btn-primary btn-sm" onClick={() => {anadirAlCarrito()}}>Agregar al carrito</button>

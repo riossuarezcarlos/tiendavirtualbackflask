@@ -1,29 +1,20 @@
 import React, {useState, useEffect} from 'react';
-import {getOrderDetailByOrder } from '../services/orderdetail';
+import {getOrderById } from '../services/order';
 import { Link } from 'react-router-dom'
 import './css/COrder.css';
 
 export default function COrder({order}) {
-
-    const [orderId, setOrderId] = useState(''); 
+ 
     const [products, setProducts] = useState([]); 
 
     const getProducts = async () =>{ 
-        let data = await getOrderDetailByOrder(orderId);
-        setProducts(data); 
+        console.log("COrder", order)
+        setProducts(order.order_detail); 
     }
-
-    const showData = () => { 
-        setOrderId(order.id); 
-    }
-
-    useEffect(() => {
-        showData();
-    }, [])
 
     useEffect(() =>{
         getProducts();
-    }, [orderId])
+    }, [order])
   
     return ( 
         <div  className="card mb-4"> 
@@ -35,9 +26,9 @@ export default function COrder({order}) {
                             <img src={prod.productImg} alt="..." className="imgpopover" />
                         </div>
                         <div className="card-body pt-1 pb-1 pl-2 pr-2">
-                            <h5 className="marca">{prod.productMark}</h5> 
+                            {/* <h5 className="marca">{prod.productMark}</h5>  */}
                             <h5 className="texto">{prod.productName}</h5>
-                            <h5 className="texto">Precio: {prod.productPrice}</h5>
+                            <h5 className="texto">Precio: {prod.productTotal}</h5>
                             <h5 className="texto">Cantidad:{prod.productCant}</h5>                    
                         </div>
                     </div> 

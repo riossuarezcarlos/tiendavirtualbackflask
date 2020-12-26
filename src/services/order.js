@@ -1,34 +1,16 @@
-import fire from '../FirestoreConfig'
- 
-const fireDB =  fire.firestore();
+import {URL_BACK_JS, FetchConf, FetchGet} from '../BackConfig';
 
 const getOrderByUser = async (userId) => {
-    let Orders = [];
-    await fireDB.collection("order").where("userId","==",userId).get()
-    .then((snapShots) => {
-        snapShots.docs.map( (order) => { 
-            Orders.push({...order.data(), id: order.id});
-        } )
-    }) 
-
-    return Orders; 
+    return await FetchGet(URL_BACK_JS, `order/${userId}`); 
 }
   
 const getOrderById = async (orderId) => { 
-    let Orders = [];
-    await fireDB.collection("order").doc(orderId).get()
-    .then((snapshot) => {  
-        [snapshot].map((doc) => {
-            Orders.push({...doc.data(), id: doc.id}); 
-        })        
-    }) 
-    
-    return Orders;
+    return await FetchGet(URL_BACK_JS, `orderporid/${orderId}`); 
 }
 
 
-const createOrder =  async (order) => {
-    return await fireDB.collection("order").add(order);
+const createOrder =  async (order) => {  
+    return await FetchConf(URL_BACK_JS, `order`, 'POST', order);  
 }
 
 export { createOrder, getOrderByUser, getOrderById };

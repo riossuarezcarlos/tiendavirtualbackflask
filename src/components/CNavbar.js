@@ -89,6 +89,7 @@ export default function CNavbar(){
      }else{
         setCantidadProductos(carrito.length);
      } 
+
      setNroProductos(carrito.length);
  }
 
