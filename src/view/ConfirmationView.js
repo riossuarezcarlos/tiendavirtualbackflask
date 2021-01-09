@@ -14,10 +14,10 @@ export default function ConfirmationView() {
 
     const getData = () =>{  
     
-        setName(order.user_name);
-        setEmail(order.user_email); 
-        setTotal(order.orderTotal);
-        setAddress(order.address_name);         
+        // setName(order.user_name);
+        // setEmail(order.user_email); 
+        // setTotal(order.orderTotal);
+        // setAddress(order.address_name);         
 
         limpiarOrder();
         limpiarCarrito();
@@ -41,11 +41,12 @@ export default function ConfirmationView() {
                     </h3>
 
                     <div>
-                        <h5>Hola {name}</h5>
-                        <p>Gracias por comprar con nosotros. Te enviaremos una confirmación a {email} cuando tus artículos se envíen.</p>
+                        {/* <h5>Hola {name}</h5> */}
+                        {/* <p>Gracias por comprar con nosotros. Te enviaremos una confirmación a {email} cuando tus artículos se envíen.</p> */}
+                        <p>Gracias por comprar con nosotros. Te enviaremos una confirmación cuando tus artículos se envíen.</p>
                     </div>
   
-                    <div>
+                    {/* <div>
                         <h5>Enviar a</h5>
                         <p className="texto">{name}</p>
                         <p className="texto">{address}</p>
@@ -68,7 +69,7 @@ export default function ConfirmationView() {
                                 </tr>
                             </tbody>
                         </table>
-                    </div>  
+                    </div>   */}
 
                     <div>
                         <p>Esperamos volver a verte pronto.</p>
