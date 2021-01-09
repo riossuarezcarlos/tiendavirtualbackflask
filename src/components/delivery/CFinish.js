@@ -2,16 +2,17 @@ import React, { useState, useEffect, useContext } from 'react';
 import { CarritoContext } from '../../context/carritoContext';
 import Card from 'react-bootstrap/Card';
 import '../css/CConfirmation.css';
-
-import {createOrder} from '../../services/order';
-import {createOrderDetail} from '../../services/orderdetail'; 
+import  { Redirect } from 'react-router-dom'
+import {createOrder} from '../../services/order'; 
+import {createPay} from '../../services/pay'; 
 import {Link} from "react-router-dom";
 
 
-export default function CFinish() {
-
+export default function CFinish() { 
     const { order, carrito, setOrderGen } = useContext(CarritoContext); 
     const [ myorder, setMyOrder] = useState([]);
+
+    const [ url, setUrl] = useState('');
 
     const showData = () =>{  
         setMyOrder(order);
@@ -20,20 +21,15 @@ export default function CFinish() {
     const crearOrder = async () => {
         let fecha = Math.floor(Date.now() / 1000);
         let myorder = order;
-        let orderId = '';
-        console.log(order)
+        let orderId = ''; 
         let dataOrder = {
             "user_phone": order.user_phone,
             "user_name": order.user_name,
+            "user_ape": order.user_ape,
             "user_email": order.user_email,
             "userId": order.userId,
             "orderTotal": order.orderTotal,
-            "orderDate": fecha,
-            "card_year": order.card_year,
-            "card_number": order.card_number,
-            "card_name": order.card_name,
-            "card_month": order.card_month,
-            "card_ccv": order.card_ccv,
+            "orderDate": fecha, 
             "address_name": order.address_name,
             "address_reference": order.address_reference,
             "address_number": order.address_number,
@@ -51,11 +47,43 @@ export default function CFinish() {
             }
             orderDetail.push(objDetail);
         }) 
-
         let objOrder = {...dataOrder, order_detail: orderDetail}
+        let cOrder = await createOrder(objOrder);  
+
+        let dataMercadoPago = {
+            "orderId": cOrder._id,
+            "cliente": {
+                "clienteId": order.userId,
+                "cliNom" : order.user_name,
+                "cliApe" : order.user_ape,
+                "cliEmail" : order.user_email,
+                "cliFonoNumero" : order.user_phone,
+                "cliFonoArea" : "+51",
+                "cliDni" : "123456789",
+                "zip_code" : "1234",
+                "street_name" : order.address_name,
+                "street_number" : order.address_number
+            }
+        } 
+        let mpItem = []
+        carrito.map( async (car) => {
+            let objitem = { 
+                "id": "12345678",
+                "title": car.productName,
+                "description": car.productName,
+                "picture_url": car.productImg,
+                "quantity": car.productCant,
+                "currency_id": "PEN",
+                "unit_price": car.productTotal
+            }
+            mpItem.push(objitem);
+        }) 
+
+        dataMercadoPago = {...dataMercadoPago, productos: mpItem} 
+        let urlMP = await createPay(dataMercadoPago);
  
-        let data = await createOrder(objOrder); 
-        console.log(data);
+        console.log(urlMP)
+        window.location.href = `${urlMP}`; 
     }
 
     useEffect( () => {
@@ -105,7 +133,8 @@ export default function CFinish() {
                                     </tbody>
                                 </table>
                             </div> 
-                            <Link className="btn btn-primary btn-block" onClick={() => {crearOrder()}} to="/confirmation">Finalizar Compra</Link>
+
+                            <button className="btn btn-primary btn-block" onClick={() => {crearOrder()}}>Finalizar Compra</button>
                         </div>
                     </div>          
 

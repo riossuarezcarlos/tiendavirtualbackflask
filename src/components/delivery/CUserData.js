@@ -26,7 +26,7 @@ export default function CUserData({userId, handleNext}) {
             setDocumento(dataUser.usuDni);
             setTelefono(dataUser.usuCel); 
             
-            setOrderUser(dataUser.usuId, user.usuCorreo, dataUser.usuNombre + ' ' + dataUser.usuApellido, dataUser.usuCel);
+            setOrderUser(dataUser.usuId, user.usuCorreo, dataUser.usuNombre, dataUser.usuApellido, dataUser.usuCel);
     
         // });    
     }

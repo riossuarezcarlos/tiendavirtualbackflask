@@ -13,8 +13,8 @@ const CarritoContextProvider = (props) => {
         console.log("setOrderGen", order)
     }
   
-    const setOrderUser =  (userId, user_email, user_name, user_phone) => {
-        setOrder({ ...order, userId: userId, user_email: user_email, user_name:user_name, user_phone:user_phone });
+    const setOrderUser =  (userId, user_email, user_name, user_ape, user_phone) => {
+        setOrder({ ...order, userId: userId, user_email: user_email, user_name:user_name,user_ape:user_ape, user_phone:user_phone });
     }
 
     const setOrderDelivery =  (address_name, address_number, address_reference) => {

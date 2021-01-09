@@ -15,7 +15,8 @@ import CFinish from '../components/delivery/CFinish';
 import { AuthContext } from '../context/authContext';
   
 function getSteps() {
-return ['Identificación', 'Entrega', 'Pago', 'Finalizar'];
+// return ['Identificación', 'Entrega', 'Pago', 'Finalizar'];
+return ['Identificación', 'Entrega', 'Finalizar'];
 }
 
 function getStepContent(step, userId, handleNext) {
@@ -25,9 +26,9 @@ function getStepContent(step, userId, handleNext) {
       case 1:
         return <CDeliveryData handleNext={handleNext}/>;
       case 2:
-        return <CPayData handleNext={handleNext}/>;
-      case 3:
         return <CFinish/>;
+      // case 3:
+      //   return <CPayData handleNext={handleNext}/>;
       default:
         return <CUserData/>;
     }
